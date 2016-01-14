@@ -3,22 +3,30 @@
 	<title>Bay Are Bike Share</title>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.12/d3.js"></script>
 	<link href="favicon.ico" rel="icon" type="image/x-icon" />
+	<style type="text/css">
+		.axis path,
+		.axis line {
+			fill: none;
+			stroke: black;
+			shape-rendering: crispEdges;
+		}
+		.axis text {
+			font-family: sans-serif;
+			font-size: 15px;
+		}
+	</style>
 </head>
 <body>
 <script type="text/javascript">
-	var dataset = [[1,2],[2,4],[3,6],[7,8]];
+	var dataset = [[1,2],[2,4],[3,6],[7,8], [1,4],[6,9],[34,66],[65,12],[1,4],[44,2],[3,5],[7,22]];
 	var W = 700
 	var H = 350
-	var padding = 20
+	var padding = 30
 	// create the svg to draw upon
 	var svg = d3.select("body")
 		.append("svg")
 		.attr("width", W)
 		.attr("height", H);
-
-	var xAxis = d3.svg.axis()
-		.scale(xscale)
-		.orient("bottom");
 
 	// lets just create some circles to test
 	var xscale = d3.scale.linear()
@@ -28,6 +36,10 @@
 	var yscale = d3.scale.linear()
 		.domain([0, d3.max(dataset, function(d) {return d[1];})])
 		.range([H - padding, padding]);
+
+	var xAxis = d3.svg.axis()
+		.scale(xscale)
+		.orient("bottom");
 
 	svg.selectAll("circle")
 		.data(dataset)
@@ -39,6 +51,9 @@
 		.attr("fill", function(d) {
 			return "rgb(0,40," + (d[1]*30) + ")";
 		});
+	svg.append("g")
+		.attr("class", "axis")
+		.call(xAxis);
 </script>
 </body>
 </html>

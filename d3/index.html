@@ -6,11 +6,39 @@
 </head>
 <body>
 <script type="text/javascript">
+	var dataset = [[1,2],[2,4],[3,6],[7,8]];
+	var W = 700
+	var H = 350
+	var padding = 20
+	// create the svg to draw upon
 	var svg = d3.select("body")
 		.append("svg")
-		.attr("width", 900)
-		.attr("height", 500);
+		.attr("width", W)
+		.attr("height", H);
 
+	var xAxis = d3.svg.axis()
+		.scale(xscale)
+		.orient("bottom");
+
+	// lets just create some circles to test
+	var xscale = d3.scale.linear()
+		.domain([0, d3.max(dataset, function(d) {return d[0];})])
+		.range([padding,W - padding]);
+
+	var yscale = d3.scale.linear()
+		.domain([0, d3.max(dataset, function(d) {return d[1];})])
+		.range([H - padding, padding]);
+
+	svg.selectAll("circle")
+		.data(dataset)
+		.enter()
+		.append("circle")
+		.attr("cx", function(d) { return xscale(d[0])})
+		.attr("cy", function(d) { return yscale(d[1])})
+		.attr("r", 5)
+		.attr("fill", function(d) {
+			return "rgb(0,40," + (d[1]*30) + ")";
+		});
 </script>
 </body>
 </html>

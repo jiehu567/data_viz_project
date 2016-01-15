@@ -18,22 +18,32 @@
 </head>
 <body>
 	<script type="text/javascript">
-		var dataset = [];
+		//global variables
+		var W = 700
+		var H = 350
+		var padding = 40
+
 		var numDataPoints = 20;
-		var xrange = Math.random() * 1000;
-		var yrange = Math.random() * 1000;
+		
 
-		for (var i = 0; i < numDataPoints; i++) {
-			var newNumber1 = Math.floor(Math.random() * xrange);
-			var newNumber2 = Math.floor(Math.random() * yrange);
-			dataset.push([newNumber1, newNumber2]);
+		// function to generatet coordinates 
+		var generateRandomData  = function(numDataPoints) {
+			var dataset = [];
+			var xrange = Math.random() * 1000;
+			var yrange = Math.random() * 1000;
+
+			for (var i = 0; i < numDataPoints; i++) {
+				var newNumberx = Math.floor(Math.random() * xrange);
+				var newNumbery = Math.floor(Math.random() * yrange);
+				dataset.push([newNumberx, newNumbery]);
+			}	
+			
+			return dataset;
 		}
+		
+	var dataset = generateRandomData(20);
 
 
-	//var dataset = [[1,2],[2,4],[3,6],[7,8], [1,4],[6,9],[34,10],[65,5],[1,4],[44,2],[3,5],[7,2]];
-	var W = 700
-	var H = 350
-	var padding = 40
 	// create the svg to draw upon
 	var svg = d3.select("body")
 	.append("svg")
@@ -85,16 +95,10 @@
 
 	d3.select("BUTTON")
 	.on("click", function() {
-		var dataset = [];
-		var numDataPoints = 20;
-		var xrange = Math.random() * 1000;
-		var yrange = Math.random() * 1000;
+		var dataset = generateRandomData(20);
 
-		for (var i = 0; i < numDataPoints; i++) {
-			var newNumber1 = Math.floor(Math.random() * xrange);
-			var newNumber2 = Math.floor(Math.random() * yrange);
-			dataset.push([newNumber1, newNumber2]);
-		}
+		xscale.domain([0, d3.max(dataset, function(d) {return d[0];})])
+		yscale.domain([0, d3.max(dataset, function(d) {return d[1];})])
 
 		svg.selectAll("circle")
 			.data(dataset)
@@ -105,16 +109,14 @@
 				return "rgb(87,158," + (d[1]*5) + ")";
 		});
 
-		svg.select("g")
-			.attr("class", "axis")
-			.attr("transform", "translate(0," + (H - padding) + ")")
-			.call(xAxis);
-		svg.select("g")
-			.attr("class", "axis")
-			.attr("transform", "translate(0," + (H - padding) + ")")
-			.call(yAxis);
 
 
+		xAxis.scale(xscale);
+		yAxis.scale(yscale);
+
+		svg.selectAll("g").call(xAxis);
+
+		svg.selectAll("g").call(yAxis);
 	});
 
 </script>
